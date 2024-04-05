@@ -1,9 +1,17 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { dbdatasource } from './data.source'
+import { ConfigModule } from '@nestjs/config'
 
 @Module({
-  imports: [],
+  imports: [
+    TypeOrmModule.forRoot(dbdatasource),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

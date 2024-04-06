@@ -7,12 +7,15 @@ import {
   DefaultValuePipe,
   ParseEnumPipe,
   ParseIntPipe,
+  Delete,
+  Param,
 } from '@nestjs/common'
 import { TodosService } from './todos.service'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { User } from 'src/user/decorators/user.decorator'
 import { Sort } from './types/sort.enum'
 import { Direction } from 'src/shared/types/enum/direction.enum'
+import { IDataTodos } from './types/data.interface'
 
 @Controller('todos')
 export class TodosController {
@@ -33,7 +36,7 @@ export class TodosController {
     direction,
     @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page,
     @Query('pageSize', new DefaultValuePipe(1), new ParseIntPipe()) pageSize,
-  ): Promise<any> {
+  ): Promise<IDataTodos> {
     return await this.todosService.findAll(userId, sort, direction, { pageSize, page })
   }
 }

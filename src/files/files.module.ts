@@ -14,5 +14,6 @@ import { FileEntity } from './files.entity'
   ],
   providers: [FilesService],
   controllers: [FilesController],
+  exports: [FilesService],
 })
 export class FilesModule {}

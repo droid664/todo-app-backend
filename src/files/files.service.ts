@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { FileEntity } from './files.entity'
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 import { CreateFileDTO } from './dto/createFile.dto'
 
 @Injectable()
@@ -26,6 +26,10 @@ export class FilesService {
 
   async findOneById(id: number): Promise<FileEntity> {
     return await this.filesRepository.findOne({ where: { id } })
+  }
+
+  async findByIds(ids: number[]): Promise<FileEntity[]> {
+    return await this.filesRepository.findBy({ id: In(ids) })
   }
 
   async deleteFile(id: number) {

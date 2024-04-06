@@ -10,6 +10,8 @@ import {
   Delete,
   Param,
   ParseUUIDPipe,
+  Patch,
+  Body,
 } from '@nestjs/common'
 import { TodosService } from './todos.service'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
@@ -17,6 +19,7 @@ import { User } from 'src/user/decorators/user.decorator'
 import { Sort } from './types/sort.enum'
 import { Direction } from 'src/shared/types/enum/direction.enum'
 import { IDataTodos } from './types/data.interface'
+import { UpdateTodoDTO } from './dto/update.dto'
 
 @Controller('todos')
 export class TodosController {
@@ -45,5 +48,11 @@ export class TodosController {
   @Delete('/:id')
   async deleteTodo(@Param('id', new ParseUUIDPipe()) id) {
     return await this.todosService.delete(id)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id')
+  async updateTodo(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateTodoDTO) {
+    return await this.todosService.update(id, dto)
   }
 }

@@ -7,11 +7,14 @@ import { Sort } from './types/sort.enum'
 import { Direction } from 'src/shared/types/enum/direction.enum'
 import { IPagination } from 'src/shared/types/interface/pagination.interface'
 import { IDataTodos } from './types/data.interface'
+import { UpdateTodoDTO } from './dto/update.dto'
+import { FilesService } from 'src/files/files.service'
 
 @Injectable()
 export class TodosService {
   constructor(
     private readonly userService: UserService,
+    private readonly filesService: FilesService,
     @InjectRepository(TodoEntity) private readonly todosRepository: Repository<TodoEntity>,
   ) {}
   async save(userId: number): Promise<TodoEntity> {
@@ -82,5 +85,21 @@ export class TodosService {
     }
 
     return await this.todosRepository.delete(id)
+  }
+
+  async update(id: string, dto: UpdateTodoDTO): Promise<TodoEntity> {
+    const findTodo = await this.findOneById(id)
+
+    if (!findTodo) {
+      throw new NotFoundException('Заметка не найдена!')
+    }
+
+    const updateTodo: TodoEntity = Object.assign(findTodo, dto)
+
+    if (dto.files) {
+      updateTodo.files = await this.filesService.findByIds(dto.files)
+    }
+
+    return await this.todosRepository.save(updateTodo)
   }
 }

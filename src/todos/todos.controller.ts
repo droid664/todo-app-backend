@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards } from '@nestjs/common'
+import { Controller, Post, UseGuards, Get } from '@nestjs/common'
 import { TodosService } from './todos.service'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { User } from 'src/user/decorators/user.decorator'
@@ -11,5 +11,11 @@ export class TodosController {
   @Post('/create')
   async createTodo(@User('id') userId): Promise<any> {
     return this.todosService.save(userId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/')
+  async findAll(@User('id') userId): Promise<any> {
+    return await this.todosService.findAll(userId)
   }
 }

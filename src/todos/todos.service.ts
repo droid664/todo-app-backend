@@ -25,4 +25,12 @@ export class TodosService {
 
     return saved
   }
+
+  async findAll(userId: number) {
+    const queryBuilder = this.todosRepository
+      .createQueryBuilder('todos')
+      .andWhere('todos.user.id = :userId', { userId })
+
+    return await queryBuilder.getMany()
+  }
 }

@@ -19,4 +19,8 @@ export class FilesService {
 
     return Promise.all(promises)
   }
+
+  async findOne(filename: string): Promise<FileEntity> {
+    return await this.filesRepository.findOne({ where: { filename } })
+  }
 }

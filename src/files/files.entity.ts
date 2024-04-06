@@ -9,6 +9,9 @@ export class FileEntity {
   originalname: string
 
   @Column()
+  filename: string
+
+  @Column()
   mimetype: string
 
   @Column()

@@ -28,12 +28,14 @@ export class FilesController {
 
     for (const file of files) {
       const filePath = file.destination.replace(/^./, '') + `/${file.filename}`
-      const { originalname, mimetype, size } = file
+      const { originalname, mimetype, size, filename } = file
+
       const dto: CreateFileDTO = {
         originalname,
         mimetype,
         size,
         filePath,
+        filename,
       }
 
       arr.push(dto)

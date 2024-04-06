@@ -3,6 +3,8 @@ import { UserService } from 'src/user/user.service'
 import { TodoEntity } from './todos.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { Sort } from './types/sort.enum'
+import { Direction } from 'src/shared/types/enum/direction.enum'
 
 @Injectable()
 export class TodosService {
@@ -26,10 +28,11 @@ export class TodosService {
     return saved
   }
 
-  async findAll(userId: number) {
+  async findAll(userId: number, sort: Sort, direction: Direction) {
     const queryBuilder = this.todosRepository
       .createQueryBuilder('todos')
       .andWhere('todos.user.id = :userId', { userId })
+      .orderBy(`todos.${sort}`, direction)
 
     return await queryBuilder.getMany()
   }

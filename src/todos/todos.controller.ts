@@ -1,7 +1,17 @@
-import { Controller, Post, UseGuards, Get } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Get,
+  Query,
+  DefaultValuePipe,
+  ParseEnumPipe,
+} from '@nestjs/common'
 import { TodosService } from './todos.service'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { User } from 'src/user/decorators/user.decorator'
+import { Sort } from './types/sort.enum'
+import { Direction } from 'src/shared/types/enum/direction.enum'
 
 @Controller('todos')
 export class TodosController {
@@ -15,7 +25,12 @@ export class TodosController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/')
-  async findAll(@User('id') userId): Promise<any> {
-    return await this.todosService.findAll(userId)
+  async findAll(
+    @User('id') userId,
+    @Query('sort', new DefaultValuePipe(Sort.updatedAt), new ParseEnumPipe(Sort)) sort,
+    @Query('direction', new DefaultValuePipe(Direction.DESC), new ParseEnumPipe(Direction))
+    direction,
+  ): Promise<any> {
+    return await this.todosService.findAll(userId, sort, direction)
   }
 }

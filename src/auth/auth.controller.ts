@@ -1,8 +1,9 @@
-import { Body, ConflictException, Controller, Post } from '@nestjs/common'
+import { Body, ConflictException, Controller, Post, UseGuards, Request } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { CreateUserDTO } from 'src/user/dto/createUser.dto'
 import { UserService } from 'src/user/user.service'
 import { IPayloadUser } from './types/payload.interface'
+import { LocalAuthGuard } from './guards/local.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -31,5 +32,11 @@ export class AuthController {
     const access_token = this.jwtService.sign(payload)
 
     return { access_token }
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
+  async login(@Request() req) {
+    return req.user
   }
 }

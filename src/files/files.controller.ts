@@ -10,6 +10,8 @@ import {
   NotFoundException,
   Res,
   StreamableFile,
+  Delete,
+  ParseIntPipe,
 } from '@nestjs/common'
 import { Response } from 'express'
 import { FilesInterceptor } from '@nestjs/platform-express'
@@ -73,5 +75,16 @@ export class FilesController {
     })
 
     return new StreamableFile(fileStream)
+  }
+
+  @Delete('/:id')
+  async deleteFile(@Param('id', new ParseIntPipe()) id: number) {
+    const findFile = await this.filesService.findOneById(id)
+
+    if (!findFile) {
+      throw new NotFoundException('Файл не найден!')
+    }
+
+    return await this.filesService.deleteFile(id)
   }
 }

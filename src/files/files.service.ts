@@ -23,4 +23,12 @@ export class FilesService {
   async findOne(filename: string): Promise<FileEntity> {
     return await this.filesRepository.findOne({ where: { filename } })
   }
+
+  async findOneById(id: number): Promise<FileEntity> {
+    return await this.filesRepository.findOne({ where: { id } })
+  }
+
+  async deleteFile(id: number) {
+    return await this.filesRepository.delete(id)
+  }
 }

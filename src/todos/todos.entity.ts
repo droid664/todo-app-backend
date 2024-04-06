@@ -1,35 +1,27 @@
-import { TodoEntity } from 'src/todos/todos.entity'
+import { FileEntity } from 'src/files/files.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
 
-@Entity({ name: 'files' })
-export class FileEntity {
+@Entity({ name: 'todos' })
+export class TodoEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
-  originalname: string
+  @Column({ default: '' })
+  title: string
 
-  @Column()
-  filename: string
+  @Column({ default: '' })
+  description: string
 
-  @Column()
-  mimetype: string
-
-  @Column()
-  size: number
-
-  @Column()
-  filePath: string
-
-  @ManyToOne(() => TodoEntity, (todo) => todo.files)
-  todo: TodoEntity
+  @OneToMany(() => FileEntity, (file) => file.todo)
+  files: FileEntity[]
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date

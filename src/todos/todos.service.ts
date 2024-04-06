@@ -96,8 +96,13 @@ export class TodosService {
 
     const updateTodo: TodoEntity = Object.assign(findTodo, dto)
 
+    // Обновляем файлы
     if (dto.files) {
       updateTodo.files = await this.filesService.findByIds(dto.files)
+    }
+
+    if (dto.cover) {
+      updateTodo.cover = await this.filesService.findOneById(dto.cover)
     }
 
     return await this.todosRepository.save(updateTodo)

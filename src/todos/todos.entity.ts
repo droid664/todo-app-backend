@@ -1,4 +1,5 @@
 import { FileEntity } from 'src/files/files.entity'
+import { UserEntity } from 'src/user/user.entity'
 import {
   Column,
   CreateDateColumn,
@@ -32,4 +33,7 @@ export class TodoEntity {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date
+
+  @ManyToOne(() => UserEntity, (user) => user.todos)
+  user: UserEntity
 }

@@ -6,6 +6,7 @@ import {
   Query,
   DefaultValuePipe,
   ParseEnumPipe,
+  ParseIntPipe,
 } from '@nestjs/common'
 import { TodosService } from './todos.service'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
@@ -30,7 +31,9 @@ export class TodosController {
     @Query('sort', new DefaultValuePipe(Sort.updatedAt), new ParseEnumPipe(Sort)) sort,
     @Query('direction', new DefaultValuePipe(Direction.DESC), new ParseEnumPipe(Direction))
     direction,
+    @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page,
+    @Query('pageSize', new DefaultValuePipe(1), new ParseIntPipe()) pageSize,
   ): Promise<any> {
-    return await this.todosService.findAll(userId, sort, direction)
+    return await this.todosService.findAll(userId, sort, direction, { pageSize, page })
   }
 }

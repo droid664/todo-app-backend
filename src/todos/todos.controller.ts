@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Delete,
   Param,
+  ParseUUIDPipe,
 } from '@nestjs/common'
 import { TodosService } from './todos.service'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
@@ -38,5 +39,11 @@ export class TodosController {
     @Query('pageSize', new DefaultValuePipe(1), new ParseIntPipe()) pageSize,
   ): Promise<IDataTodos> {
     return await this.todosService.findAll(userId, sort, direction, { pageSize, page })
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  async deleteTodo(@Param('id', new ParseUUIDPipe()) id) {
+    return await this.todosService.delete(id)
   }
 }

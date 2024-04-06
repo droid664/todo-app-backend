@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { UserService } from 'src/user/user.service'
 import { TodoEntity } from './todos.entity'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -72,5 +72,15 @@ export class TodosService {
       where: { id },
       relations: ['cover', 'files'],
     })
+  }
+
+  async delete(id: string) {
+    const findTodo = await this.findOneById(id)
+
+    if (!findTodo) {
+      throw new NotFoundException('Заметка не найдена!')
+    }
+
+    return await this.todosRepository.delete(id)
   }
 }

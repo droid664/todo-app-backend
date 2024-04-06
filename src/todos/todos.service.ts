@@ -27,7 +27,7 @@ export class TodosService {
 
     delete saved.user
 
-    return saved
+    return await this.findOneById(saved.id)
   }
 
   async findAll(
@@ -65,5 +65,12 @@ export class TodosService {
         total,
       },
     }
+  }
+
+  async findOneById(id: string): Promise<TodoEntity> {
+    return await this.todosRepository.findOne({
+      where: { id },
+      relations: ['cover', 'files'],
+    })
   }
 }

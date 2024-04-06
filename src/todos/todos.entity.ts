@@ -4,8 +4,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -33,6 +35,10 @@ export class TodoEntity {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date
+
+  @OneToOne(() => FileEntity)
+  @JoinColumn()
+  cover: FileEntity
 
   @ManyToOne(() => UserEntity, (user) => user.todos)
   user: UserEntity

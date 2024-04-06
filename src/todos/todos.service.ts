@@ -6,9 +6,7 @@ import { Repository } from 'typeorm'
 import { Sort } from './types/sort.enum'
 import { Direction } from 'src/shared/types/enum/direction.enum'
 import { IPagination } from 'src/shared/types/interface/pagination.interface'
-import { IDataResponse } from 'src/shared/types/interface/response/response.data.interface'
 import { IDataTodos } from './types/data.interface'
-import { FileEntity } from 'src/files/files.entity'
 
 @Injectable()
 export class TodosService {

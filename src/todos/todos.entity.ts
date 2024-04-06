@@ -14,8 +14,8 @@ import {
 
 @Entity({ name: 'todos' })
 export class TodoEntity {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Column({ default: '' })
   title: string

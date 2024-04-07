@@ -8,6 +8,7 @@ import { IUser } from './types/user.interface'
 import { AuthService } from './auth.service'
 import { ITokens } from './types/tokens.interface'
 import { JwtAuthGuard } from './guards/jwt-auth.guard'
+import { TokenDTO } from './dto/token.dto'
 
 @Controller('auth')
 export class AuthController {
@@ -63,5 +64,10 @@ export class AuthController {
       ...findUser,
       access_token,
     }
+  }
+
+  @Post('/refresh')
+  async refreshToken(@Body() dto: TokenDTO): Promise<any> {
+    return await this.authService.generateRefreshToken(dto.token)
   }
 }

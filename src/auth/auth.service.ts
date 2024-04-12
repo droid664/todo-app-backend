@@ -45,7 +45,7 @@ export class AuthService {
     }
   }
 
-  async generateRefreshToken(token: string): Promise<Pick<ITokens, 'access_token'>> {
+  async generateRefreshToken(token: string): Promise<ITokens> {
     const isExpired = this.isTokenExpired(token)
 
     if (!isExpired) {
@@ -60,6 +60,12 @@ export class AuthService {
 
       return {
         access_token: this.jwtService.sign(payload),
+        refresh_token: this.jwtService.sign(
+          { email: payload.email },
+          {
+            expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES') + 'd',
+          },
+        ),
       }
     } else {
       throw new UnauthorizedException()

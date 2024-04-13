@@ -9,6 +9,7 @@ import { IPagination } from 'src/shared/types/interface/pagination.interface'
 import { IDataTodos } from './types/data.interface'
 import { UpdateTodoDTO } from './dto/update.dto'
 import { FilesService } from 'src/files/files.service'
+import { UserEntity } from 'src/user/user.entity'
 
 @Injectable()
 export class TodosService {
@@ -68,6 +69,16 @@ export class TodosService {
         total,
       },
     }
+  }
+
+  async findOne(userId: number, todoId: string): Promise<TodoEntity> {
+    const queryBuilder = this.todosRepository
+      .createQueryBuilder('todo')
+      .andWhere('todo.id = :todoId', { todoId })
+      .leftJoinAndSelect('todo.cover', 'cover')
+      .andWhere('todo.user.id = :userId', { userId })
+
+    return await queryBuilder.getOne()
   }
 
   async findOneById(id: string): Promise<TodoEntity> {

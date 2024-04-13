@@ -20,6 +20,7 @@ import { Sort } from './types/sort.enum'
 import { Direction } from 'src/shared/types/enum/direction.enum'
 import { IDataTodos } from './types/data.interface'
 import { UpdateTodoDTO } from './dto/update.dto'
+import { TodoEntity } from './todos.entity'
 
 @Controller('todos')
 export class TodosController {
@@ -42,6 +43,12 @@ export class TodosController {
     @Query('pageSize', new DefaultValuePipe(1), new ParseIntPipe()) pageSize,
   ): Promise<IDataTodos> {
     return await this.todosService.findAll(userId, sort, direction, { pageSize, page })
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  async findOne(@User('id') userId, @Param('id', new ParseUUIDPipe()) todoId): Promise<TodoEntity> {
+    return await this.todosService.findOne(userId, todoId)
   }
 
   @UseGuards(JwtAuthGuard)

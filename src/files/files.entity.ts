@@ -28,6 +28,9 @@ export class FileEntity {
   @Column()
   filePath: string
 
+  @Column()
+  downloadURL: string
+
   @ManyToOne(() => TodoEntity, (todo) => todo.files)
   todo: TodoEntity
 

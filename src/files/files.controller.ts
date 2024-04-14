@@ -38,6 +38,7 @@ export class FilesController {
 
     for (const file of files) {
       const filePath = file.destination.replace(/^./, '') + `/${file.filename}`
+      const downloadURL = '/files' + filePath
       const { originalname, mimetype, size, filename } = file
 
       const dto: CreateFileDTO = {
@@ -46,6 +47,7 @@ export class FilesController {
         size,
         filePath,
         filename,
+        downloadURL,
       }
 
       arr.push(dto)

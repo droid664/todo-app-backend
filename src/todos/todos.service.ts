@@ -88,14 +88,20 @@ export class TodosService {
     })
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<{
+    message: string
+  }> {
     const findTodo = await this.findOneById(id)
 
     if (!findTodo) {
       throw new NotFoundException('Заметка не найдена!')
     }
 
-    return await this.todosRepository.delete(id)
+    await this.todosRepository.delete(id)
+
+    return {
+      message: 'Заметка успешно удалена!',
+    }
   }
 
   async update(id: string, dto: UpdateTodoDTO): Promise<TodoEntity> {

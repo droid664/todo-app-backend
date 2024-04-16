@@ -53,7 +53,7 @@ export class TodosController {
 
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  async deleteTodo(@Param('id', new ParseUUIDPipe()) id) {
+  async deleteTodo(@Param('id', new ParseUUIDPipe()) id): Promise<{ message: string }> {
     return await this.todosService.delete(id)
   }
 

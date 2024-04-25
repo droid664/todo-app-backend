@@ -1,15 +1,21 @@
 version: '3'
 
-services: 
+services:
   api:
-    build: 
+    build:
       dockerfile: './Dockerfile.dev'
       context: .
     restart: always
+    container_name: api
+    command: 'npm run start:dev'
     ports:
-      - "1337:1337"
-    networks: 
-    - todo-app-network
+      - '1337:1337'
+    networks:
+      - todo-app-network
+    depends_on:
+      - postgres
+    volumes:
+      - './src/:/opt/data/src'
 
   postgres:
     image: postgres:16.2

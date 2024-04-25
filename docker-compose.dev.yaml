@@ -1,0 +1,33 @@
+version: '3'
+
+services: 
+  api:
+    build: 
+      dockerfile: './Dockerfile.dev'
+      context: .
+    restart: always
+    ports:
+      - "1337:1337"
+    networks: 
+    - todo-app-network
+
+  postgres:
+    image: postgres:16.2
+    container_name: postgres_db
+    ports:
+      - '5432:5432'
+    networks:
+      - todo-app-network
+    environment:
+      POSTGRES_DB: todo-app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  todo-app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

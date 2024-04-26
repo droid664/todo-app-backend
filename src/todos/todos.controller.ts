@@ -28,7 +28,7 @@ export class TodosController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/create')
-  async createTodo(@User('id') userId): Promise<any> {
+  async createTodo(@User('id') userId): Promise<TodoEntity> {
     return this.todosService.save(userId)
   }
 

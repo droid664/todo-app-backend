@@ -12,6 +12,7 @@ import {
   StreamableFile,
   Delete,
   ParseIntPipe,
+  Body,
 } from '@nestjs/common'
 import { Response } from 'express'
 import { FilesInterceptor } from '@nestjs/platform-express'
@@ -19,6 +20,7 @@ import { CreateFileDTO } from './dto/createFile.dto'
 import { FilesService } from './files.service'
 import { createReadStream } from 'fs'
 import { join } from 'path'
+import { EntityDataDTO } from './dto/entityData.dto'
 
 @Controller('files')
 export class FilesController {
@@ -33,6 +35,7 @@ export class FilesController {
       }),
     )
     files: Array<Express.Multer.File>,
+    @Body() entityData: EntityDataDTO,
   ) {
     const arr: CreateFileDTO[] = []
 
@@ -53,7 +56,7 @@ export class FilesController {
       arr.push(dto)
     }
 
-    const uploadFiles = await this.filesService.save(arr)
+    const uploadFiles = await this.filesService.save(arr, entityData)
 
     return uploadFiles
   }

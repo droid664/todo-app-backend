@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  api:
+    build:
+      dockerfile: './Dockerfile.dev'
+      context: .
+    restart: always
+    container_name: api
+    command: 'npm run start:dev'
+    ports:
+      - '1337:1337'
+    networks:
+      - todo-app-network
+    depends_on:
+      - postgres
+    volumes:
+      - './src/:/opt/data/src'
+
+  postgres:
+    image: postgres:16.2
+    container_name: postgres_db
+    ports:
+      - '5432:5432'
+    networks:
+      - todo-app-network
+    environment:
+      POSTGRES_DB: todo-app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin4
+    networks:
+      - todo-app-network
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=default_email@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+
+networks:
+  todo-app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

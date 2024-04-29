@@ -9,7 +9,6 @@ import { IPagination } from 'src/shared/types/interface/pagination.interface'
 import { IDataTodos } from './types/data.interface'
 import { UpdateTodoDTO } from './dto/update.dto'
 import { FilesService } from 'src/files/files.service'
-import { UserEntity } from 'src/user/user.entity'
 
 @Injectable()
 export class TodosService {

@@ -76,6 +76,7 @@ export class TodosService {
       .createQueryBuilder('todo')
       .andWhere('todo.id = :todoId', { todoId })
       .leftJoinAndSelect('todo.cover', 'cover')
+      .leftJoinAndSelect('todo.files', 'files')
       .andWhere('todo.user.id = :userId', { userId })
 
     return await queryBuilder.getOne()

@@ -12,6 +12,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Body,
+  NotFoundException,
 } from '@nestjs/common'
 import { TodosService } from './todos.service'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
@@ -48,7 +49,13 @@ export class TodosController {
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async findOne(@User('id') userId, @Param('id', new ParseUUIDPipe()) todoId): Promise<TodoEntity> {
-    return await this.todosService.findOne(userId, todoId)
+    const todo = await this.todosService.findOne(userId, todoId)
+
+    if (!todo) {
+      throw new NotFoundException()
+    }
+
+    return todo
   }
 
   @UseGuards(JwtAuthGuard)

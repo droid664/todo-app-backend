@@ -19,15 +19,26 @@ import { FilesInterceptor } from '@nestjs/platform-express'
 import { CreateFileDTO } from './dto/createFile.dto'
 import { FilesService } from './files.service'
 import { createReadStream } from 'fs'
-import { join } from 'path'
+import { extname, join } from 'path'
 import { EntityDataDTO } from './dto/entityData.dto'
+import { diskStorage } from 'multer'
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('upload')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(
+    FilesInterceptor('files', 20, {
+      storage: diskStorage({
+        destination: './upload',
+        filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+          cb(null, `${file.originalname}-${uniqueSuffix}${extname(file.originalname)}`)
+        },
+      }),
+    }),
+  )
   async uploadFile(
     @UploadedFiles(
       new ParseFilePipe({

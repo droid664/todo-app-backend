@@ -41,7 +41,7 @@ export class TodosController {
     @Query('direction', new DefaultValuePipe(Direction.DESC), new ParseEnumPipe(Direction))
     direction,
     @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page,
-    @Query('pageSize', new DefaultValuePipe(1), new ParseIntPipe()) pageSize,
+    @Query('pageSize', new DefaultValuePipe(5), new ParseIntPipe()) pageSize,
   ): Promise<IDataTodos> {
     return await this.todosService.findAll(userId, sort, direction, { pageSize, page })
   }
